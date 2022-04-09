@@ -17,7 +17,6 @@ app.get('/:id', async(req, res)=> {
     
     const data =  await fs.readFile(dblocation)
     const players = JSON.parse(data)
-    console.log(players);
 
     const player = players.find((item)=> item.id == id)
 
