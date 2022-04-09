@@ -22,6 +22,12 @@ app.post('/', async (req,res)=> {
     players.push(player);
     await fs.writeFile(dblocation, JSON.stringify(players))
     res.status(201).json(player)
+});
+
+app.get('/', async(req, res)=> {
+    const data =  await fs.readFile(dblocation)
+    const players = JSON.parse(data)
+    res.status(201).json(players);
 })
 
 
