@@ -12,6 +12,23 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
+app.get('/:id', async(req, res)=> {
+    const id = req.params.id;
+    
+    const data =  await fs.readFile(dblocation)
+    const players = JSON.parse(data)
+    console.log(players);
+
+    const player = players.find((item)=> item.id == id)
+
+    if(!player) {
+        res.status(404).json({message: "Player Not Found"})
+    }
+
+    res.status(201).json(player);
+
+})
+
 app.post('/', async (req,res)=> {
     const player = {
         ...req.body,
