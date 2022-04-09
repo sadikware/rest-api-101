@@ -12,6 +12,27 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
+app.patch('/:id', async(req, res)=>{
+    const id = req.params.id;
+
+    const data = await fs.readFile(dblocation);
+    const players = JSON.parse(data);
+    const player = players.find((item)=> item.id == id);
+
+    if(!player) {
+        return res.status(404).json({message: "Player Not Found"})
+    }
+    player.name = req.body.name || player.name;
+    player.country = req.body.country || player.country;
+    player.rank = req.body.rank || player.rank;
+
+
+    await fs.writeFile(dblocation, JSON.stringify(players));
+    res.status(201).json(player)
+
+});
+
+
 app.get('/:id', async(req, res)=> {
     const id = req.params.id;
     
@@ -24,7 +45,7 @@ app.get('/:id', async(req, res)=> {
         res.status(404).json({message: "Player Not Found"})
     }
 
-    res.status(201).json(player);
+    res.status(200).json(player);
 
 })
 
