@@ -12,6 +12,31 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 
+app.put('/:id', async(req, res)=> {
+    const id = req.params.id;
+
+    const data = await fs.readFile(dblocation);
+    const players = JSON.parse(data);
+    let player = players.find((item)=> item.id == id);
+
+    if(!player) {
+        player = {
+            ...req.body,
+            id: shortid.generate()
+        }
+        players.push(player);
+    }
+
+    else{
+
+        player.name = req.body.name
+        player.country = req.body.country
+        player.rank = req.body.rank
+    }
+    await fs.writeFile(dblocation, JSON.stringify(players));
+    res.status(200).json(player)
+})
+
 app.patch('/:id', async(req, res)=>{
     const id = req.params.id;
 
